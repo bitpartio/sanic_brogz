@@ -9,7 +9,7 @@ except:
 
 setup(
     name='sanic_brogz',
-    version='0.1.2',
+    version='0.1.3',
     description='An extension which allows you to easily brotli compress or gzip your Sanic responses.',
     long_description=long_description,
     url='http://github.com/bitpartio/sanic_brogz',
