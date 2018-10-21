@@ -9,8 +9,8 @@ except:
 
 setup(
     name='sanic_brogz',
-    version='0.1.1',
-    description='An extension which allows you to easily brotli comprss or gzip your Sanic responses.',
+    version='0.1.2',
+    description='An extension which allows you to easily brotli compress or gzip your Sanic responses.',
     long_description=long_description,
     url='http://github.com/bitpartio/sanic_brogz',
     author='Michael Chisari',

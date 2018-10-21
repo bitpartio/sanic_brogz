@@ -70,13 +70,19 @@ class Compress(object):
         return response
 
     def gz(self, response):
+        compresslevel = self.app.config['COMPRESS_LEVEL'];
+        if compresslevel > 9: compresslevel = 9;
+        if compresslevel < 1: compresslevel = 1;
         out = gzip.compress(
             response.body,
-            compresslevel=self.app.config['COMPRESS_LEVEL'])
+            compresslevel=compresslevel)
 
         return out
 
     def br(self, response):
-        out = brotli.compress(response.body, quality=self.app.config['COMPRESS_LEVEL'])
+        quality = self.app.config['COMPRESS_LEVEL'];
+        if quality > 9: quality = 9;
+        if quality < 1: quality = 1;
+        out = brotli.compress(response.body, quality=quality)
 
         return out
