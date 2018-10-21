@@ -13,7 +13,7 @@ setup(
     description='An extension which allows you to easily brotli comprss or gzip your Sanic responses.',
     long_description=long_description,
     url='http://github.com/bitpartio/sanic_brogz',
-    author='Michael Chisari, Suby Raman',
+    author='Michael Chisari',
     license='MIT',
     packages=['sanic_brogz'],
     install_requires=('sanic', 'brotli'),
