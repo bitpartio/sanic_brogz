@@ -1,6 +1,8 @@
 from sanic import Sanic
+import string
+import random
 from sanic.response import json, html, HTTPResponse
-from sanic_compress import Compress
+from sanic_brogz import Compress
 
 app = Sanic('compressed')
 Compress(app)
@@ -14,26 +16,26 @@ def j(request, length):
 
 @app.route('/')
 def h(request):
-    res = "".join(['h' for i in range(int(501))])
+    res = ''.join(random.choices(string.ascii_uppercase + string.digits, k=15000))
     return html(res)
 
 
 @app.route('/html/status/<status>')
 def h_with_status(request, status):
-    res = "".join(['h' for i in range(501)])
+    res = ''.join(random.choices(string.ascii_uppercase + string.digits, k=15000))
     return html(res, status=int(status))
 
 
 @app.route('/html/vary/<vary>')
 def h_with_vary(request, vary):
-    res = "".join(['h' for i in range(501)])
+    res = ''.join(random.choices(string.ascii_uppercase + string.digits, k=15000))
     return html(res, headers={'Vary': vary})
 
 
 @app.route('/other/<length>')
 def other(request, length):
     content_type = request.args.get('content_type')
-    body = "".join(['h' for i in range(int(length))])
+    body = ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
     return HTTPResponse(
         body, content_type=content_type)
 

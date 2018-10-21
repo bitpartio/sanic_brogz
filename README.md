@@ -1,21 +1,21 @@
-# sanic_compress
+# sanic_brogz
 
-sanic_compress is an extension which allows you to easily gzip your Sanic responses. It is a port of the [Flask-Compress](https://github.com/libwilliam/flask-compress) extension.
+sanic_brogz is an extension which allows you to easily brotli compress or gzip your Sanic responses. It is a fork of the [sanic_compress](https://github.com/subyraman/sanic_compress) package which is a port of the [Flask-Compress](https://github.com/libwilliam/flask-compress) extension.
 
 
 ## Installation
 
 Install with `pip`:
 
-`pip install sanic_compress`
+`pip install sanic_brogz`
 
 ## Usage
 
-Usage is simple. Simply pass in the Sanic app object to the `Compress` class, and responses will be gzipped.
+Usage is simple. Simply pass in the Sanic app object to the `Compress` class, and responses will be brotli compressed or gzipped.
 
 ```python
 from sanic import Sanic
-from sanic_compress import Compress
+from sanic_brogz import Compress
 
 app = Sanic(__name__)
 Compress(app)
@@ -23,13 +23,13 @@ Compress(app)
 
 ## Options
 
-Within the Sanic application config you can provide the following settings to control the behavior of sanic_compress. None of the settings are required.
+Within the Sanic application config you can provide the following settings to control the behavior of sanic_brogz. None of the settings are required.
 
 
 `COMPRESS_MIMETYPES`: Set the list of mimetypes to compress here.
 - Default: `{'text/html','text/css','text/xml','application/json','application/javascript'}`
 
-`COMPRESS_LEVEL`: Specifies the gzip compression level (1-9).
+`COMPRESS_LEVEL`: Specifies the gzip compression level (1-9) or brotli compression level (1-11).
 - Default: `6`
 
 `COMPRESS_MIN_SIZE`: Specifies the minimum size (in bytes) threshold for compressing responses.
@@ -41,7 +41,7 @@ Example of using custom configuration:
 
 ```python
 from sanic import Sanic
-from sanic_compress import Compress
+from sanic_brogz import Compress
 
 app = Sanic(__name__)
 app.config['COMPRESS_MIMETYPES'] = {'text/html', 'application/json'}
@@ -50,6 +50,6 @@ app.config['COMPRESS_MIN_SIZE'] = 300
 Compress(app)
 ```
 
-### Note about gzipping static files:
+### Note about compressing static files:
 
 Sanic is not at heart a file server. You should consider serving static files with nginx or on a separate file server.

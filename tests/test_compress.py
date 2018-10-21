@@ -1,7 +1,7 @@
 import pytest
 from sanic import Sanic
 from sanic.response import html, json, HTTPResponse
-from sanic_compress import Compress
+from sanic_brogz import Compress
 
 OTHER_COMPRESSIBLE_TYPES = set([
     'text/css',

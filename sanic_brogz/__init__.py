@@ -1,4 +1,6 @@
 import gzip
+from pprint import pprint
+import brotli
 
 DEFAULT_MIME_TYPES = frozenset([
     'text/html', 'text/css', 'text/xml',
@@ -28,6 +30,9 @@ class Compress(object):
 
     async def _compress_response(self, request, response):
         accept_encoding = request.headers.get('Accept-Encoding', '')
+
+        accepted = [w.strip() for w in accept_encoding.split(',')]
+
         content_length = len(response.body)
         content_type = response.content_type
 
@@ -35,17 +40,24 @@ class Compress(object):
             content_type = content_type.split(';')[0]
 
         if (content_type not in self.app.config['COMPRESS_MIMETYPES'] or
-            'gzip' not in accept_encoding.lower() or
+            ('br' not in accepted and
+             'gzip' not in accepted) or
             not 200 <= response.status < 300 or
             (content_length is not None and
              content_length < self.app.config['COMPRESS_MIN_SIZE']) or
                 'Content-Encoding' in response.headers):
             return response
 
-        gzip_content = self.compress(response)
-        response.body = gzip_content
+        if 'br' in accepted:
+            compressed_content = self.br(response)
+            response.headers['Content-Encoding'] = 'br'
 
-        response.headers['Content-Encoding'] = 'gzip'
+        elif 'gzip' in accepted:
+            compressed_content = self.gz(response)
+            response.headers['Content-Encoding'] = 'gzip'
+
+        response.body = compressed_content
+
         response.headers['Content-Length'] = len(response.body)
 
         vary = response.headers.get('Vary')
@@ -57,9 +69,14 @@ class Compress(object):
 
         return response
 
-    def compress(self, response):
+    def gz(self, response):
         out = gzip.compress(
             response.body,
             compresslevel=self.app.config['COMPRESS_LEVEL'])
+
+        return out
+
+    def br(self, response):
+        out = brotli.compress(response.body, quality=self.app.config['COMPRESS_LEVEL'])
 
         return out
